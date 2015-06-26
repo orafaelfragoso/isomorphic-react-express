@@ -40,10 +40,10 @@ Here's why you should be using/doing isomorphic code:
 
 ## How it works?
 
-The project was totally inspired on David Wells' project: (https://github.com/DavidWells/isomorphic-react-example)[Isomorphic React Example]
+The project was totally inspired on David Wells' project: [Isomorphic React Example](https://github.com/DavidWells/isomorphic-react-example)
 
 You should read his examples and watch his screencast to get a better understanding of how everything's working.
 
 ## Live Example
 
-(https://isomorphic-react-express.herokuapp.com)[Test it yourself]
+[Test it yourself](https://isomorphic-react-express.herokuapp.com)
