@@ -12,6 +12,7 @@ var gulp         = require('gulp'),
     watch        = require('gulp-watch'),
     batch        = require('gulp-batch'),
     greact       = require('gulp-react'),
+    rename       = require('gulp-rename'),
     browserify   = require('gulp-browserify');
 
 
@@ -42,6 +43,7 @@ gulp.task('browserify', function () {
           debug: true,
           transform: [ 'reactify' ]
         }))
+        .pipe(rename('main.js'))
         .pipe(gulp.dest('public/vendors'));
 });
 

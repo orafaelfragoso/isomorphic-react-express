@@ -47,6 +47,7 @@
     "gulp-imagemin": "^2.2.1",
     "gulp-jshint": "^1.11.0",
     "gulp-react": "^3.0.1",
+    "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.0.1",
     "gulp-sourcemaps": "^1.5.2",
     "gulp-watch": "^4.2.4",
