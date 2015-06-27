@@ -1,13 +1,26 @@
 'use strict';
 
-var React = require('react/addons'),
-    Bootstrap = React.createFactory(require('./dist/Bootstrap'));
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 
-module.exports = function (app) {
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _reactAddons = require('react/addons');
+
+var _reactAddons2 = _interopRequireDefault(_reactAddons);
+
+var _libBootstrap = require('./lib/Bootstrap');
+
+var _libBootstrap2 = _interopRequireDefault(_libBootstrap);
+
+var Bootstrap = _reactAddons2['default'].createFactory(_libBootstrap2['default']);
+
+exports['default'] = function (app) {
 
   // Bootstrap the App
   app.get('/', function (req, res) {
-    var reactHtml = React.renderToString(Bootstrap({}));
+    var reactHtml = _reactAddons2['default'].renderToString(Bootstrap({}));
     res.render('index.ejs', { reactOutput: reactHtml });
   });
 
@@ -27,4 +40,6 @@ module.exports = function (app) {
     });
   });
 };
+
+module.exports = exports['default'];
 //# sourceMappingURL=middlewares.js.map

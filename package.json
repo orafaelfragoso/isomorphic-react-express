@@ -44,6 +44,7 @@
     "gulp-batch": "^1.0.5",
     "gulp-browserify": "^0.5.1",
     "gulp-concat": "^2.5.2",
+    "gulp-copy": "0.0.2",
     "gulp-filter": "^2.0.2",
     "gulp-flatten": "0.0.4",
     "gulp-imagemin": "^2.2.1",

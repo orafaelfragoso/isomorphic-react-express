@@ -1,17 +1,18 @@
-var React     = require('react/addons'),
-    Bootstrap = React.createFactory(require('./dist/Bootstrap'));
+import React from 'react/addons';
+import BootstrapFactory from './lib/Bootstrap'
+let Bootstrap = React.createFactory(BootstrapFactory);
 
-module.exports = function(app) {
+export default (app) => {
 
   // Bootstrap the App
   app.get('/', function(req, res){
-		var reactHtml = React.renderToString(Bootstrap({}));
+		let reactHtml = React.renderToString(Bootstrap({}));
     res.render('index.ejs', {reactOutput: reactHtml});
 	});
 
   // catch 404 and forward to error handler
   app.use(function(req, res, next) {
-    var err = new Error('Not Found');
+    let err = new Error('Not Found');
     err.status = 404;
     next(err);
   });
