@@ -13,7 +13,9 @@ var gulp         = require('gulp'),
     batch        = require('gulp-batch'),
     greact       = require('gulp-react'),
     rename       = require('gulp-rename'),
-    browserify   = require('gulp-browserify');
+    browserify   = require('gulp-browserify'),
+    babel        = require('gulp-babel'),
+    path         = require('path');
 
 
 gulp.task('stylesheets', function(){
@@ -57,6 +59,20 @@ gulp.task('images', function () {
         .pipe(gulp.dest('public/images'));
 });
 
+var paths = {
+    src: ['lib/**/*.js', 'app.js', 'config.js', 'middlewares.js', 'bin/**'],
+    dist: 'dist',
+    sourceRoot: path.join(__dirname, 'lib'),
+};
+
+gulp.task('babel', function () {
+    return gulp.src(paths.src,  {base: "."})
+        .pipe(sourcemaps.init())
+        .pipe(babel())
+        .pipe(sourcemaps.write('.', { sourceRoot: paths.sourceRoot }))
+        .pipe(gulp.dest(paths.dist));
+});
+
 // Optimize and copy fonts from bower components to public.
 // gulp.task('fonts', function () {
 //   return gulp.src($.mainBowerFiles())
@@ -78,5 +94,8 @@ gulp.task('default', function() {
 
   watch('lib/*/images/**/*', batch(function(events, done){
     gulp.start('images', done);
+  }));
+  watch(paths.src, batch(function(events, done){
+    gulp.start('babel', done)
   }));
 });

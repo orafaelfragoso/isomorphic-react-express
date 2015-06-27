@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 
+
 /**
  * Module dependencies.
  */
 
-var app   = require('../dist/app');
+'use strict';
+
+var app = require('../dist/app');
 var debug = require('debug')('isomorphic-react-express:server');
-var http  = require('http');
+var http = require('http');
 
 /**
  * Get port from environment and store in Express.
@@ -58,9 +61,7 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -83,8 +84,7 @@ function onError(error) {
 
 function onListening() {
   var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
+  var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+//# sourceMappingURL=../bin/www.js.map
