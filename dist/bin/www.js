@@ -7,22 +7,34 @@
 
 'use strict';
 
-var app = require('../dist/app');
-var debug = require('debug')('isomorphic-react-express:server');
-var http = require('http');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _app = require('../app');
+
+var _app2 = _interopRequireDefault(_app);
+
+var _debug = require('debug');
+
+var _debug2 = _interopRequireDefault(_debug);
+
+var _http = require('http');
+
+var _http2 = _interopRequireDefault(_http);
+
+(0, _debug2['default'])('isomorphic-react-express:server');
 
 /**
  * Get port from environment and store in Express.
  */
 
 var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+_app2['default'].set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server = _http2['default'].createServer(_app2['default']);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -85,6 +97,6 @@ function onError(error) {
 function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  (0, _debug2['default'])('Listening on ' + bind);
 }
 //# sourceMappingURL=../bin/www.js.map

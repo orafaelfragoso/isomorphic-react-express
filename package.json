@@ -12,9 +12,9 @@
     "npm": "^2.7.5"
   },
   "scripts": {
-    "preinstall": "node ./bin/preinstall",
+    "preinstall": "node ./dist/bin/preinstall.js",
     "postinstall": "gulp build",
-    "start": "NODE_ENV=development nodemon --debug ./bin/www",
+    "start": "NODE_ENV=development nodemon --debug ./dist/bin/www.js",
     "test": ""
   },
   "keywords": [
@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "babel": "^5.6.14",
+    "babelify": "^6.1.2",
     "browserify": "^10.2.4",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^2.3.1",

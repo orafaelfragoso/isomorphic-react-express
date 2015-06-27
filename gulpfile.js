@@ -44,7 +44,7 @@ gulp.task('browserify', function () {
   return gulp.src(['./dist/lib/Main.js'])
         .pipe(browserify({
           debug: true,
-          transform: [ 'reactify' ]
+          transform: [ 'babelify' ]
         }))
         .pipe(rename('main.js'))
         .pipe(gulp.dest('public/vendors'));
@@ -94,7 +94,7 @@ gulp.task('default', function() {
     gulp.start('stylesheets', done);
   }));
 
-  watch(['lib/**/*.js', 'app.js', 'config.js', 'middlewares.js'], batch(function(events, done){
+  watch(['bin/*', 'lib/**/*.js', 'app.js', 'config.js', 'middlewares.js'], batch(function(events, done){
     gulp.start(['jshint', 'babel', 'browserify', 'copy'], done);
   }));
 
