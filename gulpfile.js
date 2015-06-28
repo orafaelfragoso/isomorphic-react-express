@@ -13,7 +13,10 @@ var gulp         = require('gulp'),
     batch        = require('gulp-batch'),
     greact       = require('gulp-react'),
     rename       = require('gulp-rename'),
-    browserify   = require('gulp-browserify');
+    browserify   = require('gulp-browserify'),
+    babel        = require('gulp-babel'),
+    copy         = require('gulp-copy'),
+    path         = require('path');
 
 
 gulp.task('stylesheets', function(){
@@ -38,10 +41,10 @@ gulp.task('jshint', function () {
 });
 
 gulp.task('browserify', function () {
-  return gulp.src(['lib/Main.js'])
+  return gulp.src(['./dist/lib/Main.js'])
         .pipe(browserify({
           debug: true,
-          transform: [ 'reactify' ]
+          transform: [ 'babelify' ]
         }))
         .pipe(rename('main.js'))
         .pipe(gulp.dest('public/vendors'));
@@ -57,6 +60,25 @@ gulp.task('images', function () {
         .pipe(gulp.dest('public/images'));
 });
 
+var paths = {
+    src: ['lib/**/*.js', 'app.js', 'config.js', 'middlewares.js', 'bin/**'],
+    dist: 'dist',
+    sourceRoot: path.join(__dirname, '.'),
+};
+
+gulp.task('babel', function () {
+    return gulp.src(paths.src,  {base: '.'})
+        .pipe(sourcemaps.init())
+        .pipe(babel())
+        .pipe(sourcemaps.write('.', { sourceRoot: paths.sourceRoot }))
+        .pipe(gulp.dest(paths.dist));
+});
+
+gulp.task('copy', function (){
+  return gulp.src(['public/**', 'lib/**/*.ejs', 'lib/**/*.scss'], {base: '.'})
+    .pipe(copy(paths.dist));
+});
+
 // Optimize and copy fonts from bower components to public.
 // gulp.task('fonts', function () {
 //   return gulp.src($.mainBowerFiles())
@@ -65,18 +87,22 @@ gulp.task('images', function () {
 //         .pipe(gulp.dest('public/fonts'));
 // });
 
-gulp.task('build', ['stylesheets', 'jshint', 'browserify', 'images']);
+gulp.task('build', ['stylesheets', 'jshint', 'browserify', 'images', 'babel', 'copy']);
 
 gulp.task('default', function() {
   watch('lib/**/*.scss', batch(function(events, done){
     gulp.start('stylesheets', done);
   }));
 
-  watch(['lib/**/*.js', 'app.js', 'config.js', 'middlewares.js'], batch(function(events, done){
-    gulp.start(['jshint', 'browserify'], done);
+  watch(['bin/*', 'lib/**/*.js', 'app.js', 'config.js', 'middlewares.js'], batch(function(events, done){
+    gulp.start(['jshint', 'babel', 'browserify', 'copy'], done);
   }));
 
   watch('lib/*/images/**/*', batch(function(events, done){
     gulp.start('images', done);
+  }));
+
+  watch(['lib/**/*.ejs', 'lib/**/*.scss'], batch(function(events, done){
+    gulp.start('copy', done);
   }));
 });

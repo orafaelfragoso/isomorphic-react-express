@@ -21,3 +21,5 @@ node_modules
 public/images
 public/stylesheets
 public/vendors
+
+dist
