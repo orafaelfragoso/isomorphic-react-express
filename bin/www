@@ -4,6 +4,8 @@
  * Module dependencies.
  */
 
+require('babel/register')({experimental: true});
+
 var app   = require('../app');
 var debug = require('debug')('isomorphic-react-express:server');
 var http  = require('http');
