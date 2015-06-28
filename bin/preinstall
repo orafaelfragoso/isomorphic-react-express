@@ -1,24 +1,26 @@
 #!/usr/bin/env node
 
+
 /**
  * Module dependencies.
  * Original source:
  * https://raw.githubusercontent.com/strongloop-community/express-example-modular/master/bin/preinstall.js
  */
 
-import fs from 'fs';
-import path from'path';
-import cp from 'child_process';
+var fs      = require('fs'),
+    resolve = require('path').resolve,
+    join    = require('path').join,
+    cp      = require('child_process');
 
 // get library path
-let lib = path.resolve(__dirname, '../lib/');
+var lib = resolve(__dirname, '../lib/');
 
 fs.readdirSync(lib)
-  .forEach( mod => {
-    var modPath = path.join(lib, mod);
+  .forEach(function (mod) {
+    var modPath = join(lib, mod);
 
     // ensure path has package.json
-    if (!fs.existsSync(path.join(modPath, 'package.json'))) return;
+    if (!fs.existsSync(join(modPath, 'package.json'))) return;
 
     // install folder
     cp.spawn('npm', ['i'], { env: process.env, cwd: modPath, stdio: 'inherit' });

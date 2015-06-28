@@ -4,22 +4,22 @@
  * Module dependencies.
  */
 
-import app from '../app';
-import debug from 'debug'; debug('isomorphic-react-express:server');
-import http from 'http';
+var app   = require('../app');
+var debug = require('debug')('isomorphic-react-express:server');
+var http  = require('http');
 
 /**
  * Get port from environment and store in Express.
  */
 
-let port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-let server = http.createServer(app);
+var server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -58,7 +58,7 @@ function onError(error) {
     throw error;
   }
 
-  let bind = typeof port === 'string'
+  var bind = typeof port === 'string'
     ? 'Pipe ' + port
     : 'Port ' + port;
 
@@ -82,8 +82,8 @@ function onError(error) {
  */
 
 function onListening() {
-  let addr = server.address();
-  let bind = typeof addr === 'string'
+  var addr = server.address();
+  var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
