@@ -1,0 +1,15 @@
+{
+  "name": "isomorphic-react-express-bootstrap",
+  "version": "0.0.1",
+  "description": "Bootstrap the application",
+  "main": "./Bootstrap.jsx",
+  "private": true,
+  "engines": {
+    "node": "^0.12.2",
+    "npm": "^2.7.5"
+  },
+  "author": "Rafael Fragoso <rafaelfragosom@gmail.com>",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}
