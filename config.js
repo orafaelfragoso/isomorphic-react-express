@@ -1,13 +1,14 @@
-import express from 'express';
-import path from 'path';
-import favicon from 'serve-favicon';
-import logger from 'morgan';
-import cookieParser from 'cookie-parser';
-import bodyParser from 'body-parser';
-import {install} from 'node-jsx';install();
+var express      = require('express'),
+    path         = require('path'),
+    favicon      = require('serve-favicon'),
+    logger       = require('morgan'),
+    cookieParser = require('cookie-parser'),
+    bodyParser   = require('body-parser');
 
+module.exports = function(app) {
 
-export default (app) => {
+  // JSX Transpiler
+  require("node-jsx").install();
 
   // view engine setup
   app.set('views', path.join(__dirname, 'lib/_Shared/views'));

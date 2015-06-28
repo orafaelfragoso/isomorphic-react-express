@@ -1,9 +1,10 @@
-import express from 'express';
+var express      = require('express'),
+    app          = express();
 
-let app = express();
 
 // load modules
-import config from './config.js'; config(app);
-import middlewares from './middlewares.js'; middlewares(app);
+require('./config.js')(app);
+require('./middlewares.js')(app);
 
-export default app;
+
+module.exports = app;
