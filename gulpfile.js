@@ -39,9 +39,8 @@ gulp.task('bundle', function () {
   console.log('Compiling Javascript...');
 
   var bundler = browserify({
-    entries: './lib/Main.jsx',
-    extensions: ['.jsx'],
-    paths: ['.node_modules', './lib/'],
+    extensions: ['.jsx', '.js'],
+    paths: ['./node_modules/', './lib/'],
     debug: true,
   });
 
