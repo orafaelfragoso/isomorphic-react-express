@@ -7,17 +7,32 @@ var gulp         = require('gulp'),
     concat       = require('gulp-concat'),
     jshint       = require('gulp-jshint'),
     imagemin     = require('gulp-imagemin'),
-    flatten      = require('gulp-flatten'),
-    filter       = require('gulp-filter'),
     watch        = require('gulp-watch'),
     batch        = require('gulp-batch'),
     greact       = require('gulp-react'),
     rename       = require('gulp-rename'),
-    browserify   = require('gulp-browserify'),
-    babel        = require('gulp-babel'),
-    copy         = require('gulp-copy'),
+    source       = require('vinyl-source-stream'),
+    browserify   = require('browserify'),
+    babelify     = require('babelify'),
+    watchify     = require('watchify'),
     path         = require('path');
 
+var paths = {
+  src: ['lib/**/*.jsx'],
+  dist: 'public',
+  sourceRoot: path.join(__dirname, '.'),
+},
+bundler = watchify(browserify({
+  entries: './lib/Main.jsx',
+  extensions: ['.jsx'],
+  debug: true
+}));
+
+// Babel transform
+bundler.transform(babelify);
+
+// On updates recompile
+bundler.on('update', bundle);
 
 gulp.task('stylesheets', function(){
   return gulp.src('lib/**/*.scss')
@@ -34,20 +49,26 @@ gulp.task('stylesheets', function(){
 });
 
 gulp.task('jshint', function () {
-  return gulp.src(['lib/**/*.js', 'app.js', 'config.js', 'middlewares.js'])
+  return gulp.src(paths.src,  {base: '.'})
         .pipe(greact())
         .pipe(jshint())
         .pipe(jshint.reporter('jshint-stylish'));
 });
 
-gulp.task('browserify', function () {
-  return gulp.src(['./dist/lib/Main.js'])
-        .pipe(browserify({
-          debug: true,
-          transform: [ 'babelify' ]
-        }))
-        .pipe(rename('main.js'))
-        .pipe(gulp.dest('public/vendors'));
+function bundle() {
+  console.log('\n Compiling Javascript...');
+
+  return bundler.bundle()
+      .on('error', function (err) {
+        console.log(err.message);
+        this.emit("end");
+      })
+      .pipe(source('main.js'))
+      .pipe(gulp.dest('public/vendors'));
+}
+
+gulp.task('bundle', function () {
+    return bundle();
 });
 
 gulp.task('images', function () {
@@ -60,25 +81,6 @@ gulp.task('images', function () {
         .pipe(gulp.dest('public/images'));
 });
 
-var paths = {
-    src: ['lib/**/*.js', 'app.js', 'config.js', 'middlewares.js', 'bin/**'],
-    dist: 'dist',
-    sourceRoot: path.join(__dirname, '.'),
-};
-
-gulp.task('babel', function () {
-    return gulp.src(paths.src,  {base: '.'})
-        .pipe(sourcemaps.init())
-        .pipe(babel())
-        .pipe(sourcemaps.write('.', { sourceRoot: paths.sourceRoot }))
-        .pipe(gulp.dest(paths.dist));
-});
-
-gulp.task('copy', function (){
-  return gulp.src(['public/**', 'lib/**/*.ejs', 'lib/**/*.scss'], {base: '.'})
-    .pipe(copy(paths.dist));
-});
-
 // Optimize and copy fonts from bower components to public.
 // gulp.task('fonts', function () {
 //   return gulp.src($.mainBowerFiles())
@@ -87,22 +89,18 @@ gulp.task('copy', function (){
 //         .pipe(gulp.dest('public/fonts'));
 // });
 
-gulp.task('build', ['stylesheets', 'jshint', 'browserify', 'images', 'babel', 'copy']);
+gulp.task('build', ['stylesheets', 'jshint', 'images', 'bundle']);
 
-gulp.task('default', function() {
+gulp.task('default', ['bundle'], function() {
   watch('lib/**/*.scss', batch(function(events, done){
     gulp.start('stylesheets', done);
   }));
 
-  watch(['bin/*', 'lib/**/*.js', 'app.js', 'config.js', 'middlewares.js'], batch(function(events, done){
-    gulp.start(['jshint', 'babel', 'browserify', 'copy'], done);
+  watch(['app.js', 'config.js', 'middlewares.js'], batch(function(events,done) {
+    gulp.start(['jshint'], done);
   }));
 
   watch('lib/*/images/**/*', batch(function(events, done){
     gulp.start('images', done);
-  }));
-
-  watch(['lib/**/*.ejs', 'lib/**/*.scss'], batch(function(events, done){
-    gulp.start('copy', done);
   }));
 });
