@@ -1,12 +1,12 @@
 import React from 'react/addons';
 
-let Bootstrap = React.createClass({
+class Bootstrap extends React.Component {
 
-    componentDidMount: () => {
+    componentDidMount() {
       console.log('Component is mounted!');
-    },
+    }
 
-    render:  ()=> {
+    render() {
       return (
         <div>
           <h1 id='main-title'>Isomorphic Server Side Rendering with React</h1>
@@ -15,6 +15,6 @@ let Bootstrap = React.createClass({
       );
     }
 
-});
+};
 
 export default Bootstrap;
