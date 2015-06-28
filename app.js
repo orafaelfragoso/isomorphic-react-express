@@ -1,3 +1,7 @@
+'use strict';
+
+require('app-module-path').addPath(__dirname + '/lib'); // Tell node to use lib/ as node_modules as well
+
 var express      = require('express'),
     app          = express();
 

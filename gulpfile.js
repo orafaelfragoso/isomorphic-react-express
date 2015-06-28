@@ -9,18 +9,11 @@ var gulp         = require('gulp'),
     imagemin     = require('gulp-imagemin'),
     watch        = require('gulp-watch'),
     batch        = require('gulp-batch'),
-    rename       = require('gulp-rename'),
     source       = require('vinyl-source-stream'),
     browserify   = require('browserify'),
     babelify     = require('babelify'),
-    remapify     = require('remapify'),
     path         = require('path');
 
-var paths = {
-  src: ['lib/**/*.jsx'],
-  dist: 'public',
-  sourceRoot: path.join(__dirname, '.'),
-};
 
 gulp.task('stylesheets', function(){
   return gulp.src('lib/**/*.scss')
@@ -37,7 +30,7 @@ gulp.task('stylesheets', function(){
 });
 
 gulp.task('jshint', function () {
-  return gulp.src(paths.src,  {base: '.'})
+  return gulp.src('*.js',  {base: '.'})
         .pipe(jshint())
         .pipe(jshint.reporter('jshint-stylish'));
 });
@@ -46,23 +39,18 @@ gulp.task('bundle', function () {
   console.log('Compiling Javascript...');
 
   var bundler = browserify({
+    entries: './lib/Main.jsx',
     extensions: ['.jsx'],
-    debug: true
-  }).plugin(remapify, [{
-    src: './lib/**/*.jsx',
-    expose: '.',
-    cwd: __dirname,
-    filter: function(alias, dirname, basename) {
-      return path.join(__dirname, alias);
-    }
-  }]);
+    paths: ['.node_modules', './lib/'],
+    debug: true,
+  });
 
   bundler.transform(babelify);
 
   return bundler.bundle()
       .on('error', function (err) {
         console.log(err.message);
-        this.emit("end");
+        this.emit('end');
       })
       .pipe(source('main.js'))
       .pipe(gulp.dest('public/vendors'));

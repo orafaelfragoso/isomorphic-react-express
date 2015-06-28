@@ -1,14 +1,13 @@
+'use strict';
+
 var express      = require('express'),
     path         = require('path'),
-    favicon      = require('serve-favicon'),
+    // favicon      = require('serve-favicon'),
     logger       = require('morgan'),
     cookieParser = require('cookie-parser'),
     bodyParser   = require('body-parser');
 
 module.exports = function(app) {
-
-  // JSX Transpiler
-  require("node-jsx").install();
 
   // view engine setup
   app.set('views', path.join(__dirname, 'lib/_Shared/views'));

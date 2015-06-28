@@ -1,3 +1,5 @@
+'use strict';
+
 var React     = require('react/addons'),
     Bootstrap = React.createFactory(require('Bootstrap'));
 
@@ -5,7 +7,7 @@ module.exports = function(app) {
 
   // Bootstrap the App
   app.get('/', function(req, res){
-		var reactHtml = React.renderToString(Bootstrap({}));
+		var reactHtml = React.renderToString(new Bootstrap({}));
     res.render('index.ejs', {reactOutput: reactHtml});
 	});
 
@@ -17,7 +19,7 @@ module.exports = function(app) {
   });
 
   // error handlers
-  app.use(function(err, req, res, next) {
+  app.use(function(err, req, res) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
