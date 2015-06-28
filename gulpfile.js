@@ -9,30 +9,18 @@ var gulp         = require('gulp'),
     imagemin     = require('gulp-imagemin'),
     watch        = require('gulp-watch'),
     batch        = require('gulp-batch'),
-    greact       = require('gulp-react'),
     rename       = require('gulp-rename'),
     source       = require('vinyl-source-stream'),
     browserify   = require('browserify'),
     babelify     = require('babelify'),
-    watchify     = require('watchify'),
+    remapify     = require('remapify'),
     path         = require('path');
 
 var paths = {
   src: ['lib/**/*.jsx'],
   dist: 'public',
   sourceRoot: path.join(__dirname, '.'),
-},
-bundler = watchify(browserify({
-  entries: './lib/Main.jsx',
-  extensions: ['.jsx'],
-  debug: true
-}));
-
-// Babel transform
-bundler.transform(babelify);
-
-// On updates recompile
-bundler.on('update', bundle);
+};
 
 gulp.task('stylesheets', function(){
   return gulp.src('lib/**/*.scss')
@@ -50,13 +38,26 @@ gulp.task('stylesheets', function(){
 
 gulp.task('jshint', function () {
   return gulp.src(paths.src,  {base: '.'})
-        .pipe(greact())
         .pipe(jshint())
         .pipe(jshint.reporter('jshint-stylish'));
 });
 
-function bundle() {
-  console.log('\n Compiling Javascript...');
+gulp.task('bundle', function () {
+  console.log('Compiling Javascript...');
+
+  var bundler = browserify({
+    extensions: ['.jsx'],
+    debug: true
+  }).plugin(remapify, [{
+    src: './lib/**/*.jsx',
+    expose: '.',
+    cwd: __dirname,
+    filter: function(alias, dirname, basename) {
+      return path.join(__dirname, alias);
+    }
+  }]);
+
+  bundler.transform(babelify);
 
   return bundler.bundle()
       .on('error', function (err) {
@@ -65,10 +66,6 @@ function bundle() {
       })
       .pipe(source('main.js'))
       .pipe(gulp.dest('public/vendors'));
-}
-
-gulp.task('bundle', function () {
-    return bundle();
 });
 
 gulp.task('images', function () {
@@ -91,12 +88,16 @@ gulp.task('images', function () {
 
 gulp.task('build', ['stylesheets', 'jshint', 'images', 'bundle']);
 
-gulp.task('default', ['bundle'], function() {
+gulp.task('default', function() {
   watch('lib/**/*.scss', batch(function(events, done){
     gulp.start('stylesheets', done);
   }));
 
-  watch(['app.js', 'config.js', 'middlewares.js'], batch(function(events,done) {
+  watch(['lib/**/*.jsx'], batch(function(events, done) {
+    gulp.start(['bundle'], done);
+  }));
+
+  watch(['app.js', 'config.js', 'middlewares.js'], batch(function(events, done) {
     gulp.start(['jshint'], done);
   }));
 
