@@ -1,5 +1,5 @@
 var React     = require('react/addons'),
-    Bootstrap = React.createFactory(require('./lib/Bootstrap'));
+    Bootstrap = React.createFactory(require('./app/components/Bootstrap'));
 
 module.exports = function(app) {
 

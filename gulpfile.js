@@ -17,7 +17,7 @@ var gulp         = require('gulp'),
 
 
 gulp.task('stylesheets', function(){
-  return gulp.src('lib/**/*.scss')
+  return gulp.src('app/components/**/*.scss')
         .pipe(sourcemaps.init())
         .pipe(sass({outputStyle: 'compressed'}))
         .on('error', function handleError(err) {
@@ -31,14 +31,14 @@ gulp.task('stylesheets', function(){
 });
 
 gulp.task('jshint', function () {
-  return gulp.src(['lib/**/*.js', 'app.js', 'config.js', 'middlewares.js'])
+  return gulp.src(['app/components/**/*.js', 'app.js', 'config.js', 'middlewares.js'])
         .pipe(greact())
         .pipe(jshint())
         .pipe(jshint.reporter('jshint-stylish'));
 });
 
 gulp.task('browserify', function () {
-  return gulp.src(['lib/Main.js'])
+  return gulp.src(['app/components/Main.js'])
         .pipe(browserify({
           debug: true,
           transform: [ 'reactify' ]
@@ -48,7 +48,7 @@ gulp.task('browserify', function () {
 });
 
 gulp.task('images', function () {
-  return gulp.src('lib/*/images/**/*')
+  return gulp.src('app/components/*/images/**/*')
         .pipe(imagemin({
           optimizationLevel: 3,
           progressive: true,
@@ -68,15 +68,15 @@ gulp.task('images', function () {
 gulp.task('build', ['stylesheets', 'jshint', 'browserify', 'images']);
 
 gulp.task('default', function() {
-  watch('lib/**/*.scss', batch(function(events, done){
+  watch('app/components/**/*.scss', batch(function(events, done){
     gulp.start('stylesheets', done);
   }));
 
-  watch(['lib/**/*.js', 'app.js', 'config.js', 'middlewares.js'], batch(function(events, done){
+  watch(['app/components/**/*.js', 'app.js', 'config.js', 'middlewares.js'], batch(function(events, done){
     gulp.start(['jshint', 'browserify'], done);
   }));
 
-  watch('lib/*/images/**/*', batch(function(events, done){
+  watch('app/components/*/images/**/*', batch(function(events, done){
     gulp.start('images', done);
   }));
 });

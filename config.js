@@ -11,7 +11,7 @@ module.exports = function(app) {
   require("node-jsx").install();
 
   // view engine setup
-  app.set('views', path.join(__dirname, 'lib/_Shared/views'));
+  app.set('views', path.join(__dirname, 'app/views'));
   app.set('view engine', 'ejs');
 
   //app.use(favicon(__dirname + '/public/favicon.ico'));
